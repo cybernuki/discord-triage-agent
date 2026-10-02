@@ -99,13 +99,13 @@ Validated at startup with zod; a missing or malformed value stops the bot with a
 
 ## Design decisions
 
-**The classifier and the LLM are separate.** Deciding what a message is and writing a reply are different jobs. Jev answers the first quickly, cheaply and with calibrated probabilities that code can threshold. Claude is only invoked for the narrow subset that benefits from generation, and only when the classifier is confident. Mixing both into one prompt would make routing slow, non-deterministic and hard to test.
+**The classifier and the LLM are separate.** Deciding what a message is and writing a reply are different jobs. Jev answers the first with typed probabilities that code can threshold. Claude is only invoked for the narrow subset that benefits from generation, and only when the classifier is confident. Mixing both into one prompt would make routing slow, non-deterministic and hard to test.
 
 **Confidence gates automation.** A wrong confident answer in a support channel costs more than a short wait for a person. Below the threshold the bot says less and hands off. The threshold is one setting because the right value depends on your data; tune it against real messages.
 
 **Three questions, one request.** The questions are independent, so they run in parallel and cost one round trip. Code consumes only the answers it needs.
 
-**Domain, adapters, app.** `src/domain` is pure logic with no SDK imports; an ESLint rule enforces this. `src/adapters` wraps Discord, Jev, Bedrock and the filesystem behind small ports. `src/app` wires them together. Domain code was written test-first, and adapters are tested through fakes, so the suite makes no network calls.
+**Domain, adapters, app.** `src/domain` is pure logic with no SDK imports; an ESLint rule enforces this. `src/adapters` wraps Discord, Jev, Bedrock and the filesystem behind small ports. `src/app` wires them together. Domain logic is covered by unit tests, and adapters are tested through fakes, so the suite makes no network calls.
 
 **Fail soft.** Classifier failure, answer failure and Discord errors are logged and degrade to a human hand-off. One bad message does not stop the bot.
 
