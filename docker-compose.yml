@@ -1,0 +1,42 @@
+services:
+  bot:
+    build:
+      context: .
+      args:
+        BUILD_COMMIT: ${BUILD_COMMIT:-}
+    image: discord-triage-agent:local
+    restart: unless-stopped
+    env_file: ${ENV_FILE:-.env}
+
+    # The bot has no inbound ports. It writes a heartbeat file once the Discord
+    # gateway is ready; the healthcheck fails if that file goes stale.
+    healthcheck:
+      test: ["CMD", "node", "dist/healthcheck.js"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+    # Hardening: immutable filesystem, no privileges, bounded resources.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+
+    # Edit FAQs on the host without rebuilding; the container only reads them.
+    volumes:
+      - ./knowledge:/app/knowledge:ro
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
