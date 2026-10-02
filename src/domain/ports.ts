@@ -15,3 +15,9 @@ export interface Answerer {
 export interface KnowledgeBase {
   load(): Promise<KnowledgeSection[]>;
 }
+
+/** Minimal structured logger, so inner layers never depend on a logging library. */
+export interface Logger {
+  info(message: string, fields?: Record<string, unknown>): void;
+  error(message: string, fields?: Record<string, unknown>): void;
+}
