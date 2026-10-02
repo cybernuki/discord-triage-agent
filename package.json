@@ -1,0 +1,36 @@
+{
+  "name": "discord-triage-agent",
+  "version": "0.1.0",
+  "description": "Discord support triage bot: typed classification with TypeSafe Jev, optional FAQ answers with Claude on AWS Bedrock.",
+  "license": "MIT",
+  "author": "Jhonatan Arenas",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1145.0",
+    "@typesafe-ai/sdk": "^0.6.0",
+    "discord.js": "^14.27.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^26.6.4",
+    "eslint": "^9.39.5",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^4.1.11"
+  }
+}
