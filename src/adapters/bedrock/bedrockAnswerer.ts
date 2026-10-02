@@ -2,7 +2,7 @@ import type { ConverseCommandInput, ConverseCommandOutput } from "@aws-sdk/clien
 import { ANSWER_SYSTEM_PROMPT, buildAnswerPrompt } from "../../domain/answerPrompt.js";
 import type { Answerer } from "../../domain/ports.js";
 
-/** The one Bedrock call this adapter needs; wired to the real SDK in `app/main.ts`. */
+/** The one Bedrock call this adapter needs; wired to the real SDK in `src/main.ts`. */
 export type Converse = (input: ConverseCommandInput) => Promise<ConverseCommandOutput>;
 
 export interface BedrockAnswererOptions {
